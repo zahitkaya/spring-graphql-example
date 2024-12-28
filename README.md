@@ -100,44 +100,89 @@ Content-Type: application/json
 **GraphQL Query:**
 
 ```graphql
-query {
-  user(id: 1) {
-    id
-    name
-    email
-    posts {
-      title
-      comments {
-        text
-      }
+query Order {
+    order {
+        id
+        salespersonId
+        customerId {
+            id
+            firstName
+            lastName
+            email
+            phoneNumber
+            address
+            city
+            state
+            zipCode
+        }
     }
-  }
 }
+
 ```
 
 **GraphQL Şema:**
 
 ```graphql
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  posts: [Post]
+type Customer{
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phoneNumber: String!
+    address: String!
+    city: String!
+    state: String!
+    zipCode: String!
 }
 
-type Post {
-  id: ID!
-  title: String!
-  comments: [Comment]
+input CustomerInput{
+    firstName: String!
+    lastName: String!
+    email: String!
+    phoneNumber: String!
+    address: String!
+    city: String!
+    state: String!
+    zipCode: String!
 }
 
-type Comment {
-  id: ID!
-  text: String!
+type Query{
+    customer: [Customer]!
+    customerById(id: ID): Customer
+    customerByEmail(email: String): Customer
+    orderLine: [OrderLine]
+    order: [Order]!
+}
+
+type Order {
+    id: ID
+    customerId: Customer
+    salespersonId: Int
+}
+
+type OrderLine {
+    id: ID!
+    product: Product!
+    order: String!
+    quantity: Int!
+    price: Float
+}
+
+type Product {
+    id: ID!
+    name: String!
+    size: Int
+    variety: String
+    price: Float
+    status: String
+}
+
+type Mutation{
+    addCustomer(input: CustomerInput): Customer
 }
 ```
 
-Bu sorgu, kullanıcı bilgilerini, kullanıcının gönderilerini ve bu gönderilere yapılan yorumları tek bir istekte alabilir.
+Bu sorgu, müşteri bilgilerini, müşterinin gönderilerini tek bir istekte alabilir.
 
 ---
 
